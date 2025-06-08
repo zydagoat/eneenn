@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>enendndnnenr</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    textarea {
+      width: 100%;
+      max-width: 600px;
+      height: 100px;
+      background-color: #111;
+      color: #fff;
+      border: 1px solid #444;
+      padding: 10px;
+      margin: 10px 0;
+      resize: vertical;
+      font-size: 16px;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      margin: 10px 0;
+    }
+
+    button {
+      background-color: #222;
+      color: #fff;
+      border: 1px solid #555;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #444;
+    }
+
+    @media (max-width: 600px) {
+      .btn-group {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      button {
+        width: 100%;
+      }
+
+      textarea {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>enter a message</h1>
+  <textarea id="inputText" placeholder="Enter text..."></textarea>
+
+  <div class="btn-group">
+    <button onclick="encode()">encode</button>
+    <button onclick="decode()">decode</button>
+  </div>
+
+  <textarea id="outputText" placeholder="Result will appear here..." readonly></textarea>
+
+<script>
+  const cipher = {
+    A: "jkf", B: "oiu", C: "erh", D: "tyz", E: "gqb", F: "npc", G: "zlx",
+    H: "bdm", I: "qaz", J: "mlk", K: "sve", L: "dru", M: "fgh", N: "xun",
+    O: "vqp", P: "lam", Q: "mew", R: "rjd", S: "wqs", T: "hud", U: "cef",
+    V: "xop", W: "itn", X: "kry", Y: "nej", Z: "bvc"
+  };
+
+  const fullCipher = {};
+  for (let [k, v] of Object.entries(cipher)) {
+    fullCipher[k] = v;
+    fullCipher[k.toLowerCase()] = v.toLowerCase();
+  }
+
+  const reverseCipher = {};
+  for (let [k, v] of Object.entries(fullCipher)) {
+    reverseCipher[v] = k;
+  }
+
+  function encode() {
+    const input = document.getElementById("inputText").value;
+    let output = "";
+
+    for (let char of input) {
+      if (fullCipher[char]) {
+        output += fullCipher[char];
+      } else {
+        output += char;
+      }
+    }
+
+    document.getElementById("outputText").value = output;
+  }
+
+  function decode() {
+    const input = document.getElementById("inputText").value;
+    let output = "";
+
+    for (let i = 0; i < input.length;) {
+      const chunk = input.slice(i, i + 3);
+      if (reverseCipher[chunk]) {
+        output += reverseCipher[chunk];
+        i += 3;
+      } else {
+        output += input[i];
+        i++;
+      }
+    }
+
+    document.getElementById("outputText").value = output;
+  }
+</script>
+</body>
+</html>
