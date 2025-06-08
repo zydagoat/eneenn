@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Ultra Secure Cipher</title>
+  <title>new cipher</title>
   <style>
     body {
       background-color: #000;
@@ -42,21 +42,21 @@
   </style>
 </head>
 <body>
-  <h1>Ultra Secure Encode / Decode</h1>
+  <h1>encode/decode</h1>
 
-  <textarea id="input" placeholder="Enter text..."></textarea>
+  <textarea id="input" placeholder="enter text..."></textarea>
   <div>
-    <button onclick="encode()">Encode</button>
-    <button onclick="decode()">Decode</button>
+    <button onclick="encode()">encode</button>
+    <button onclick="decode()">decode</button>
+    <button onclick="window.location.href='index.html'">old cipher</button>
   </div>
-  <textarea id="output" placeholder="Result..." readonly></textarea>
+  <textarea id="output" placeholder="result..." readonly></textarea>
 
   <script>
 const letters = "abcdefghijklmnopqrstuvwxyz";
 const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*_-+=~?><";
 const usedChunks = new Set();
 
-// Generate random-length cipher string (4–15 characters)
 function randomChunk() {
   let chunk;
   do {
@@ -67,7 +67,6 @@ function randomChunk() {
   return chunk;
 }
 
-// Assign 20+ unique cipher strings to each letter
 const multiCipher = {};
 for (let letter of letters) {
   multiCipher[letter] = [];
@@ -76,7 +75,6 @@ for (let letter of letters) {
   }
 }
 
-// Decode map
 const decodeMap = {};
 for (let [letter, chunks] of Object.entries(multiCipher)) {
   for (let chunk of chunks) {
@@ -84,10 +82,8 @@ for (let [letter, chunks] of Object.entries(multiCipher)) {
   }
 }
 
-// Sort chunks longest-first for decoding
 const sortedChunks = Object.keys(decodeMap).sort((a, b) => b.length - a.length);
 
-// Encode
 function encode() {
   const text = document.getElementById("input").value.toLowerCase();
   let result = "";
@@ -102,7 +98,6 @@ function encode() {
   document.getElementById("output").value = result;
 }
 
-// Decode
 function decode() {
   const text = document.getElementById("input").value;
   let result = "";
