@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ultra Secure Cipher</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    textarea {
+      width: 90%;
+      max-width: 600px;
+      height: 100px;
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 1rem;
+      background-color: #111;
+      color: #fff;
+      border: 1px solid #333;
+      border-radius: 5px;
+    }
+    button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      background-color: #333;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+    }
+    button:hover {
+      background-color: #555;
+    }
+  </style>
+</head>
+<body>
+  <h1>Ultra Secure Encode / Decode</h1>
+
+  <textarea id="input" placeholder="Enter text..."></textarea>
+  <div>
+    <button onclick="encode()">Encode</button>
+    <button onclick="decode()">Decode</button>
+  </div>
+  <textarea id="output" placeholder="Result..." readonly></textarea>
+
+  <script>
+const letters = "abcdefghijklmnopqrstuvwxyz";
+const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*_-+=~?><";
+const usedChunks = new Set();
+
+// Generate random-length cipher string (4–15 characters)
+function randomChunk() {
+  let chunk;
+  do {
+    const len = Math.floor(Math.random() * 12) + 4;
+    chunk = [...Array(len)].map(() => chars[Math.floor(Math.random() * chars.length)]).join('');
+  } while (usedChunks.has(chunk));
+  usedChunks.add(chunk);
+  return chunk;
+}
+
+// Assign 20+ unique cipher strings to each letter
+const multiCipher = {};
+for (let letter of letters) {
+  multiCipher[letter] = [];
+  for (let i = 0; i < 25; i++) {
+    multiCipher[letter].push(randomChunk());
+  }
+}
+
+// Decode map
+const decodeMap = {};
+for (let [letter, chunks] of Object.entries(multiCipher)) {
+  for (let chunk of chunks) {
+    decodeMap[chunk] = letter;
+  }
+}
+
+// Sort chunks longest-first for decoding
+const sortedChunks = Object.keys(decodeMap).sort((a, b) => b.length - a.length);
+
+// Encode
+function encode() {
+  const text = document.getElementById("input").value.toLowerCase();
+  let result = "";
+  for (let char of text) {
+    if (multiCipher[char]) {
+      const options = multiCipher[char];
+      result += options[Math.floor(Math.random() * options.length)];
+    } else {
+      result += char;
+    }
+  }
+  document.getElementById("output").value = result;
+}
+
+// Decode
+function decode() {
+  const text = document.getElementById("input").value;
+  let result = "";
+  let i = 0;
+  while (i < text.length) {
+    let matched = false;
+    for (let chunk of sortedChunks) {
+      if (text.startsWith(chunk, i)) {
+        result += decodeMap[chunk];
+        i += chunk.length;
+        matched = true;
+        break;
+      }
+    }
+    if (!matched) {
+      result += text[i];
+      i++;
+    }
+  }
+  document.getElementById("output").value = result;
+}
+  </script>
+</body>
+</html>
